@@ -1,0 +1,10 @@
+# swap files #
+##############
+*.swap
+*.swp
+
+
+# data folder #
+###############
+
+/data

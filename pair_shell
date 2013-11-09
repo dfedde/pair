@@ -1,0 +1,18 @@
+#!/bin/sh
+
+greating="thank you for pairing with me"
+
+
+trap '' 2 20 24
+echo ""
+echo $greating
+echo ""
+#get a name from the user that they would like to use during the session 
+read -p  "what is your name name/alias? [? for help]
+> " name
+echo ""
+#if the host alows it ask for the way they want to connect eg. pair mirror rouge
+read -p  "how whould you like to connect? [? for help] 
+> " session_type
+
+wemux $session_type 
