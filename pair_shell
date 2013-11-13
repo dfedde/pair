@@ -58,15 +58,48 @@ do
       echo "type the name you want to go by during this session"
       echo
       ;;
+    "exit")
+      exit
+      ;;
     *)
       add_user
       break
+      ;;
   esac
 done
 
 echo ""
-#if the host alows it ask for the way they want to connect eg. pair mirror rouge
-read -p  "how whould you like to connect? [? for help] 
-> " session_type
 
-wemux $session_type 
+#if the host alows it ask for the way they want to connect eg. pair mirror rouge
+while :
+do
+  read -p  $'how whould you like to connect? [? for help]\n> ' session_type
+  case $session_type in
+    "?")
+      echo
+      echo "the way you would like to connect eg. pair mirror rogue"
+      echo
+      ;;
+    "pair")
+      wemux pair
+      break
+      ;;
+    "rogue")
+      wemux rogue
+      break
+      ;;
+    "mirror")
+      wemux mirror
+      break
+      ;;
+    "exit")
+      exit
+      ;;
+    *)
+      echo
+      echo "thats not an option"
+      echo
+      ;;
+  esac
+done
+exit
