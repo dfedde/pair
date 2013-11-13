@@ -49,8 +49,20 @@ echo $greating
 
 echo ""
 #get a name from the user that they would like to use during the session 
-read -p  "what is your name name/alias? [? for help]
-> " name && add_user
+while :
+do
+  read -p  $'what is your name name/alias? [? for help]\n> ' name 
+  case $name in
+    "?")
+      echo
+      echo "type the name you want to go by during this session"
+      echo
+      ;;
+    *)
+      add_user
+      break
+  esac
+done
 
 echo ""
 #if the host alows it ask for the way they want to connect eg. pair mirror rouge
