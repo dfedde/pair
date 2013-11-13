@@ -3,9 +3,30 @@
 add_user(){
     echo $name >> ~/.users
 }
+host_list=(change_this_in_wemux_conf)
+socket_prefix="/tmp/wemux"
+options="-u"
+allow_pair_mode="true"
+allow_rogue_mode="true"
+default_client_mode="mirror"
+allow_kick_user="true"
+allow_server_change="false"
+default_server_name="wemux"
+allow_server_list="true"
+allow_user_list="true"
+announce_attach="true"
+announce_server_change="true"
+
+# Prevent users from changing their $USER env variable to become host.
+username=`whoami`
+# Set $EDITOR default to vi if not configured on host machine.
+editor=${EDITOR:="vi"}
+
+# Load configuration options from /usr/local/etc/wemux.conf
+[ -f /usr/local/etc/wemux.conf ] && . /usr/local/etc/wemux.conf
 
 greating="thank you for pairing with me"
-
+ 
 trap '' 2 20 24
 echo ""
 echo $greating
