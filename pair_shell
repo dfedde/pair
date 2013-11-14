@@ -1,33 +1,39 @@
 #!/bin/sh
 
 
-host_list=(change_this_in_wemux_conf)
-socket_prefix="/tmp/wemux"
-options="-u"
-allow_pair_mode="true"
-allow_rogue_mode="true"
-default_client_mode="mirror"
-allow_kick_user="true"
-allow_server_change="false"
-default_server_name="wemux"
-allow_server_list="true"
-allow_user_list="true"
-announce_attach="true"
-announce_server_change="true"
+wemux_socket_prefix="/tmp/wemux"
+wemuxp_socket_prefix="/tmp/wemuxp"
 greating="thank you for pairing with me"
-
-# Load configuration options from /usr/local/etc/wemux.conf
-[ -f /usr/local/etc/wemux.conf ] && . /usr/local/etc/wemux.conf
-
 
 #add a user to a list to keep track of all users on the session
 add_user(){
     echo $name >> ~/.users
 }
 
-#check if the server is running
 server_running(){
-  wemux_server_sockets=$socket_prefix*
+  wemux_server_sockets=$wemux_socket_prefix*
+  for wemux_server in $wemux_server_sockets; do
+    redirect=`tmux -S $wemux_server server-info 2>&1`; server_running=$?
+    if [ "$server_running" == 0 ]; then
+      return 0
+    fi
+  done
+  return 1
+}
+#check if the server is running
+wemux_running(){
+  wemux_server_sockets=$wemux_socket_prefix*
+  for wemux_server in $wemux_server_sockets; do
+    redirect=`tmux -S $wemux_server server-info 2>&1`; server_running=$?
+    if [ "$server_running" == 0 ]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+wemuxp_running(){
+  wemux_server_sockets=$wemuxp_socket_prefix*
   for wemux_server in $wemux_server_sockets; do
     redirect=`tmux -S $wemux_server server-info 2>&1`; server_running=$?
     if [ "$server_running" == 0 ]; then
@@ -49,7 +55,8 @@ echo $greating
 
 echo ""
 #get a name from the user that they would like to use during the session 
-while :
+
+while wemuxp_running
 do
   read -p  $'what is your name name/alias? [? for help]\n> ' name 
   case $name in
@@ -77,20 +84,26 @@ do
   case $session_type in
     "?")
       echo
-      echo "the way you would like to connect eg. pair mirror rogue"
-      echo
+      echo "the way you would like to connect eg. pair mirror"
+      echo "better help to come"
       ;;
     "pair")
-      wemux pair
-      break
+      if wemux_running; then
+        wemux pair
+        break
+      fi
       ;;
     "rogue")
+      if wemux_running; then
       wemux rogue
-      break
+        break
+      fi
       ;;
     "mirror")
+      if wemux_running; then
       wemux mirror
-      break
+        break
+      fi
       ;;
     "exit")
       exit
