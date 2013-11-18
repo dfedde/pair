@@ -1,6 +1,6 @@
 #!/bin/sh
 
-
+emux_socket_prefix="/tmp/wemux"
 greating="thank you for pairing with me"
 
 server_running(){
