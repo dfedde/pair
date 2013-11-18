@@ -1,39 +1,10 @@
 #!/bin/sh
 
 
-wemux_socket_prefix="/tmp/wemux"
-wemuxp_socket_prefix="/tmp/wemuxp"
 greating="thank you for pairing with me"
-
-#add a user to a list to keep track of all users on the session
-add_user(){
-    echo $name >> ~/.users
-}
 
 server_running(){
   wemux_server_sockets=$wemux_socket_prefix*
-  for wemux_server in $wemux_server_sockets; do
-    redirect=`tmux -S $wemux_server server-info 2>&1`; server_running=$?
-    if [ "$server_running" == 0 ]; then
-      return 0
-    fi
-  done
-  return 1
-}
-#check if the server is running
-wemux_running(){
-  wemux_server_sockets=$wemux_socket_prefix*
-  for wemux_server in $wemux_server_sockets; do
-    redirect=`tmux -S $wemux_server server-info 2>&1`; server_running=$?
-    if [ "$server_running" == 0 ]; then
-      return 0
-    fi
-  done
-  return 1
-}
-
-wemuxp_running(){
-  wemux_server_sockets=$wemuxp_socket_prefix*
   for wemux_server in $wemux_server_sockets; do
     redirect=`tmux -S $wemux_server server-info 2>&1`; server_running=$?
     if [ "$server_running" == 0 ]; then
@@ -54,30 +25,7 @@ echo ""
 echo $greating
 
 echo ""
-#get a name from the user that they would like to use during the session 
 
-while wemuxp_running
-do
-  read -p  $'what is your name name/alias? [? for help]\n> ' name 
-  case $name in
-    "?")
-      echo
-      echo "type the name you want to go by during this session"
-      echo
-      ;;
-    "exit")
-      exit
-      ;;
-    *)
-      add_user
-      break
-      ;;
-  esac
-done
-
-echo ""
-
-#if the host alows it ask for the way they want to connect eg. pair mirror rouge
 while :
 do
   read -p  $'how whould you like to connect? [? for help]\n> ' session_type
@@ -88,22 +36,13 @@ do
       echo "better help to come"
       ;;
     "pair")
-      if wemux_running; then
         wemux pair
-        break
-      fi
       ;;
     "rogue")
-      if wemux_running; then
       wemux rogue
-        break
-      fi
       ;;
     "mirror")
-      if wemux_running; then
       wemux mirror
-        break
-      fi
       ;;
     "exit")
       exit
