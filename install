@@ -1,0 +1,5 @@
+#! /bin/sh
+useradd -M pair
+cp pair_shell /bin/
+echo "/bin/pair_shell">>/etc/shells
+chsh -s /bin/pair_shell pair
