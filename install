@@ -1,5 +1,7 @@
 #! /bin/sh
+echo this depends on ssh tmux and wemux please have them installed
 useradd -M pair
 cp pair_shell /bin/
 echo "/bin/pair_shell">>/etc/shells
 chsh -s /bin/pair_shell pair
+echo this depends on ssh tmux and wemux please have them installed
